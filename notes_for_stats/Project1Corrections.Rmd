@@ -1,0 +1,166 @@
+---
+title: "Project 1--Vectors, Functions, and Data Frames (Corrections)"
+author: "Elise Haylett"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    code_folding: hide
+---
+
+```{r globalopts, include = FALSE}
+library(knitr)
+opts_chunk$set(comment = "", message = FALSE, warning = FALSE)
+```
+
+***
+### **Problem 1**
+  
+Create, store, and print the following vectors using functions `:`, `c`, `seq`, and/or `rep`. Use the object names indicated in CAPS.
+
+* X: The sample space of a random variable X is the integers {0, 1, 2, ..., 10}.
+* SCORE: Scores on a project can be 0 or any positive, even integer up to 100.
+* PH: A machine reads the pH of a solution to one decimal place of precision.
+* PLAY: A player in a particular game can choose rock, paper, scissors, lizard, or Spock.
+* CLOCK: A clock counts down from 60 seconds to zero seconds in whole-second increments. (Values should *decrease*.)
+* SONG: A particular song's chorus contains the following three phrases, sung once then repeated.
+    + I get knocked down
+    + But I get up again
+    + You're never gonna keep me down
+* BLOOD: In a population of 100 people, each person has one of four blood types: A, B, AB, or O. The four types occur in the following proportions.
++ A = 40%
++ B = 11%
++ AB = 4%
++ O = 45%
+
+```{r problem1code}
+# Put your code here.
+X <- 0:10
+X
+
+SCORE <- seq(0, 100, by = 2)
+SCORE 
+
+PH <- seq(0, 14, by = 0.1)
+PH
+
+PLAY <- c("rock", "paper", "scissors", "lizard", "Spock")
+PLAY
+
+CLOCK <- 60:0
+CLOCK
+
+Chorus <- c("I get knocked down", "But I get up again", "You're never gonna keep me down")
+SONG <- rep(Chorus, times = 2)
+SONG
+
+BLOOD <- c(rep("A", 40), rep("B", 11), rep("AB", 4), rep("O", 45))
+BLOOD 
+```
+
+
+***
+### **Problem 2**
+
+Write a `for` loop to create an integer vector that contains the first 10 numbers in the [Fibonacci sequence](https://www.mathsisfun.com/numbers/fibonacci-sequence.html). 
+
+![](https://www.onlinemathlearning.com/image-files/fibonacci-golden-spiral.png)
+
+* Use the `numeric` function to create a vector of zeroes called FIB in which to store your loop results. 
+* Set the second element of FIB to one.
+* Use a loop to calculate the remaining 8 elements (i.e., elements 3 through 10) and insert them in FIB.
+* Store and print FIB when it is finished.
+
+If you don't get the correct sequence of 10 numbers, check your work!
+  
+```{r problem2code}
+# Put your code here.
+FIB <- numeric(10)
+FIB[2] <- 1
+
+for (i in 3:10) {
+   FIB[i] <- FIB[i - 1] + FIB[i - 2]
+}
+FIB
+```
+
+
+***
+### **Problem 3**
+
+Adapt the code you wrote in Problem 2 as the basis for a function that will generate the first **n** digits of the Fibonacci sequence, given a user-input value of n. You should be able to save the function output as an object using the assignment arrow `<-` (for example, `outputvector <- FIBfunction(inputvalue)`). Once you have defined your function, use it with n = 100, save the vector containing the generated sequence, and print it out.
+
+![](https://stat-jet-asu.github.io/Moodlepics/functionmachine.png)
+
+```{r problem3code}
+# Put your code here.
+FIBfunc <- function(n) {
+  FIB <- numeric(n)
+  FIB[2] <- 1
+  for (n in 3:n) {
+    FIB[n] <- FIB[n - 1] + FIB[n - 2]
+  }
+  FIB 
+}
+sprintf("%1.0f", FIBfunc(100))
+```
+
+**Bonus:** Can you use `paste` and/or `sprintf` to "dress up" the `print` output of your vector?
+
+
+***
+### **Problem 4**
+
+Suppose we want to simulate a game of [Rock, Paper, Scissors, Lizard, Spock](http://www.samkass.com/theories/RPSSL.html). Write a `repeat` loop using the `sample` function to represent a player's choice of what to play on each turn. Sample from a vector like the one you created in Problem 1, assuming that all options are equally likely, and `break` the loop when Spock is first played. Print out the results of each play as the loop is running and the number of the turn on which Spock occurred at the end. (Note: There is roughly a 90% chance that number of turns will be 10 or fewer.)
+
+![](https://lh5.googleusercontent.com/--BKdiYZnOSQ/VPGhXs-FnPI/AAAAAAAAL9E/o5z6hrTZUqk/s500/20150228-rock_paper_scissors_lizard_spock.gif)
+
+**Bonus:** Can you adapt your code for a situation where the five options are not equally likely?
+
+```{r problem4code}
+# Put your code here.
+TURN <- 1
+repeat {
+  PLAY2 <- sample(PLAY, 1)
+  print(PLAY2)
+  if (PLAY2 == "Spock") 
+    break
+  TURN <-  TURN + 1
+}
+TURN
+```
+
+
+***
+### **Problem 5**
+
+Create a dataframe containing the information in the `Project1ClassList.xlsx` spreadsheet. Later in the course you will learn to read the data into R from a `.csv` or `.xlsx` file, but for now, create a vector for each column and use the `data.frame` function to turn them into a data frame like you did in Chapter 5 of the [Introduction to R](https://www.datacamp.com/courses/free-introduction-to-r) course in DataCamp. Use `str`, `head`, and `tail` to show the structure and contents of your data frame.
+
+```{r problem5code}
+# Put your code here.
+Name <- c("Atwell, Kaleb L.", "Bass, Nicholas W.", "Baxter, Jamie A.", "Baxter, Madelyn M.", "Carter, Nicholas A.", "Daniels, Samantha B.", "Fennell, Charles T.", "Goodman, Madeline M.", "Harrison, Seth W.", "Haylett, Elise C.", "Higginbotham, Baylie", "Lee, Sebastien J.", "McCook, Mary E.", "McCrimmon, Kyera K.", "Miranda-Hernandez, Daniela P.", "Nilsson, Connor S.", "Renko, Anna F.", "Rodriguez Guzman, Bianca D.", "Smith, Joel S.", "Stansberry, Amanda L.", "Tosto, Christopher H.", "Tyndall, Matthew B.", "Ugboro, Hope U.", "Watkins, Alyssa M.", "White, Joseph D.")
+
+PrefName <- c("", "Nick", "Jamie", "Madelyn", "Alex", "Sam", "", "Maddy", "Seth", "", "", "Sebastien", "Maribeth", "Kyera", "Danni", "Connor", "", "", "", "", "Chris", "", "", "", "Daniel")
+
+Email <- c("atwellkl1@appstate.edu", "bassnw@appstate.edu", "baxterja@appstate.edu", "baxtermm@appstate.edu", "carterna3@appstate.edu", "danielssb@appstate.edu", "fennellct@appstate.edu", "goodmanmm@appstate.edu", "harrisonsw@appstate.edu", "haylettec@appstate.edu", "higginbothamb@appstate.edu", "leesj3@appstate.edu", "mccookme@appstate.edu", "mccrimmonkk@appstate.edu", "mirandahernandedp@appstate.edu", "nilssoncs@appstate.edu", "renkoaf@appstate.edu", "rodriguezguzmanbd@appstate.edu", "smithjs5@appstate.edu", "stansberryal@appstate.edu", "tostoch@appstate.edu", "tyndallmb@appstate.edu", "ugborohu@appstate.edu", "watkinsam1@appstate.edu", "whitejd5@appstate.edu")
+
+Class <- c("Senior", "Junior", "Junior", "Sophomore", "Senior", "Senior", "Senior", "Senior", "Junior", "Senior", "Junior", "Junior", "Senior", "Junior", "Senior", "Junior", "Junior", "Sophomore", "Senior", "Junior", "Senior", "Junior", "Senior", "Senior", "Sophomore")
+
+College <- c("CB",  "GC", "AS", "AS", "AS", "AS", "AS", "AS", "AS", "AS", "GC", "AS", "AS", "AS", "AS", "AS", "AS", "GC", "AS", "AS", "AS", "CB", "AS", "AS", "GC")  
+
+
+ClassList <- data.frame(Name, PrefName, Email, Class, College)
+
+str(ClassList)
+
+head(ClassList)
+tail(ClassList)
+```
+
+
+<hr>
+
+```{r}
+sessionInfo()
+```

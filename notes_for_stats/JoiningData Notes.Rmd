@@ -1,0 +1,95 @@
+---
+title: 'Joining & Cleaning Examples'
+author: 'Elise Haylett'
+date: 'Updated: `r format(Sys.time(), "%A, %B %d, %Y @ %X")`'
+output: html_document
+---
+
+```{r globalopts, include = FALSE}
+library(knitr)
+opts_chunk$set(comment = "", message = FALSE, warning = FALSE)
+```
+
+```{r packages}
+library(tidyverse)
+library(nycflights13)
+```
+
+```{r airlines}
+glimpse(airlines)
+head(airlines)
+```
+
+```{r airports}
+glimpse(airports)
+head(airports)
+```
+
+```{r flights}
+glimpse(flights)
+head(flights)
+```
+
+```{r planes}
+glimpse(planes)
+head(planes)
+```
+
+```{r weather}
+glimpse(weather)
+head(weather)
+```
+
+```{r}
+# add airline carrier names to the flights data
+#left_join keeps all rows to the left from left of dataset and adds info from where it canto the right
+#inner_join will connect where there is an x and y match and cut out all rows that don't match
+
+flights2      <- left_join(flights, airlines, by = "carrier") 
+flights2inner <- inner_join(flights, airlines, by = "carrier")
+identical(flights2, flights2inner) #will compare objects in R to tell you whether objects are the same, produces true or false... if 2 objects are identical = TRUE
+all.equal(flights2, flights2inner)#will compare objects in R to tell you whether objects are the same, produces true... if 2 objects are identical = TRUE
+```
+
+```{r}
+# now add airport names for the origin airport
+# what if we also want names for destination? 
+
+flights3     <- left_join(flights2, airports, by = c("origin" = "faa"))
+flights3full <- full_join(flights2, airports, by = c("origin" = "faa")) #matches what it can but keeps everything from both datasets
+identical(flights3, flights3full)
+all.equal(flights3, flights3full)
+```
+
+```{r}
+# now add data about weather at origin airport 
+# which is the correct join function to use here?
+# what if the variable time_hour did not exist?
+
+flights4inner <- inner_join(flights3, weather, by = c("time_hour", "origin")) #if you want a limited amount of data
+
+flights4left  <- left_join(flights3, weather, by = c("time_hour", "origin")) #to maximize flight data
+
+flights4right <- right_join(flights3, weather, by = c("time_hour", "origin")) #to maximize weather data
+
+flights4full  <- full_join(flights3, weather, by = c("time_hour", "origin")) #if want a whole bunch of data
+
+flights4left2 <- left_join(flights3, weather, by = c("year", "month", "day", "hour", "origin")) #with more "by" variable, here are fewer replicated cols
+```
+
+```{r}
+identical(flights4left, flights4left2)
+all.equal(flights4left, flights4left2)
+
+identical(flights4left$day.x, flights4left$day.y)
+all.equal(flights4left$day.x, flights4left$day.y)
+
+sum(is.na(flights4left$day.x))
+which((is.na(flights4left$day.x)))
+sum(is.na(flights4left$day.y))
+which((is.na(flights4left$day.y)))
+```
+
+```{r}
+sessionInfo()
+```

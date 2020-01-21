@@ -1,0 +1,103 @@
+---
+title: 'Reading Excel Data Examples'
+author: 'YOUR NAME HERE'
+date: 'Updated: `r format(Sys.time(), "%A, %B %d, %Y @ %X")`'
+output: html_document
+---
+
+```{r globalopts, include = FALSE}
+library(knitr)
+opts_chunk$set(comment = "", message = FALSE, warning = FALSE)
+```
+
+```{r packages}
+library(tidyverse)
+library(readxl)
+```
+
+
+Syntax of the `read_excel` function:
+
+    read_excel(path, sheet = NULL, range = NULL, col_names = TRUE,
+      col_types = NULL, na = "", trim_ws = TRUE, skip = 0,
+      n_max = Inf, guess_max = min(1000, n_max),
+      progress = readxl_progress(), .name_repair = "unique")
+
+
+```{r powerballdata}
+# https://rstudio-pubs-static.s3.amazonaws.com/413264_1a9480fe7a0448e0840d6cdb39b4ded2.html
+# make sure your Rmd/script and Excel file are in the same directory
+
+excel_sheets("powerball.xlsx")
+
+pbnumbers1 <- read_excel("powerball.xlsx", sheet = 1)
+class(pbnumbers1)
+head(pbnumbers1)
+glimpse(pbnumbers1)
+
+pbnumbers2 <- read_excel("powerball.xlsx", 
+                         sheet = "powerballtest", 
+                         col_names = c("drawdate", "numbers", "multiplier"), 
+                         skip = 1)
+
+jackpot <- read_excel("powerball.xlsx",
+                         sheet = "Power_Jackpot_Values",
+                         col_names = c("drawdate", "jackpotval"),
+                         skip = 1)
+
+numballs <- read_excel("powerball.xlsx",
+                         sheet = "Number_of_Balls")
+
+inflation <- read_excel("powerball.xlsx",
+                         sheet = "Inflation")
+class(pbnumbers2)
+head(pbnumbers2)
+```
+
+
+```{r fbicrimedata}
+# https://ucr.fbi.gov/crime-in-the-u.s/2017/crime-in-the-u.s.-2017/tables/table-1
+
+url <- "https://ucr.fbi.gov/crime-in-the-u.s/2017/crime-in-the-u.s.-2017/tables/table-1/table-1.xls/output.xls"
+download.file(url, "crimetable.xls")
+excel_sheets("crimetable.xls")
+ucr2017 <- read_excel("crimetable.xls", 
+                      range = "A5:V24", 
+                      col_names = c("year",
+                                    "population",
+                                    "violent",
+                                    "violentrate",
+                                    "murder",
+                                    "murderrate",
+                                    "raperevised",
+                                    "raperevisedrate",
+                                    "rapelegacy",
+                                    "rapelegacyrate",
+                                    "robbery", 
+                                    "robberyrate",
+                                    "assault",
+                                    "assaultrate",
+                                    "property",
+                                    "propertyrate",
+                                    "burglary",
+                                    "burglaryrate",
+                                    "larceny",
+                                    "larcenyrate",
+                                    "vehicle",
+                                    "vehiclerate"))
+class(ucr2017)
+head(ucr2017)
+```
+
+
+Challenge! Can you load the Excel files from [Importing Data into R, Part 1](https://www.datacamp.com/courses/importing-data-in-r-part-1)?
+
+```{r importingchallenge}
+
+```
+
+
+```{r}
+sessionInfo()
+```
+

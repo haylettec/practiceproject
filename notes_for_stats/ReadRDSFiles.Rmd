@@ -1,0 +1,41 @@
+---
+title: 'Reading RDS and Rdata Examples'
+author: 'YOUR NAME HERE'
+date: 'Updated: `r format(Sys.time(), "%A, %B %d, %Y @ %X")`'
+output: html_document
+---
+
+```{r globalopts, include = FALSE}
+library(knitr)
+opts_chunk$set(comment = "", message = FALSE, warning = FALSE)
+```
+
+```{r packages}
+library(tidyverse)
+```
+
+
+```{r messyweatherdata}
+# data file from Cleaning Data in R (https://www.datacamp.com/courses/cleaning-data-in-r)
+
+messyweatherdata <- readRDS(file = url("https://assets.datacamp.com/production/repositories/34/datasets/b3c1036d9a60a9dfe0f99051d2474a54f76055ea/weather.rds"))
+
+class(messyweatherdata)
+head(messyweatherdata)
+
+saveRDS(messyweatherdata, file = "messyweatherdata.rds")
+```
+
+
+```{r fishdata}
+# data file from Data Visualization with ggplot2 (Part 1) (https://www.datacamp.com/courses/data-visualization-with-ggplot2-1)
+
+load(file = url("https://assets.datacamp.com/production/repositories/236/datasets/eb4457a6db78d48de3720bb10b47e5c740a21234/fish.RData"))
+
+save(fish.species, fish.tidy, fish.year, file = )
+```
+
+
+```{r}
+sessionInfo()
+```

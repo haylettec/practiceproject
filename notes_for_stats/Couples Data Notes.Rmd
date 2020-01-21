@@ -1,0 +1,84 @@
+---
+title: "Couples"
+author: "Elise Haylett"
+date: "10/1/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = "",
+                      warning = FALSE,
+                      message = FALSE)
+library(readr)
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+couples <- read_csv(file = url("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/couples.csv"))
+```
+
+```{r}
+ggplot(couples, aes(x = hAge, y = wAge)) +
+  geom_point() +
+  coord_fixed() +
+  labs(title = "Ages of Married Couples",
+       x = "Husband's Age in years", 
+       y = "Wife's Age in years")
+```
+
+
+```{r}
+ggplot(couples, aes(x = hAge, y = wAge)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_abline(intercept = 0, 
+              slope = 1, 
+              color = "red", 
+              linetype = "dashed") +
+  coord_fixed() +
+  labs(title = "Ages of Married Couples",
+       x = "Husband's Age in years", 
+       y = "Wife's Age in years")
+```
+
+```{r}
+#linear model of blue line in graph
+agemodel <- lm(wAge ~ hAge, data = couples)
+summary(agemodel)
+```
+
+```{r}
+get_regression_table(agemodel)
+#how can I get get_regression_table to show only the term and estimate?
+#using the select() function*** this extracts columns only, filter() extracts rows
+get_regression_table(agemodel) %>% 
+  select(term, estimate)
+```
+```{r}
+regpoints <- get_regression_points(agemodel)
+head(regpoints)
+```
+
+```{r}
+newages <- data.frame(hAge = seq(20, 60, 10)) #or c(20, 30, 40, 50, 60)
+
+get_regression_points(agemodel, newdata = newages) #newdata tells model to make new predictions for the new data
+#there is no residual because there is no true y-value
+```
+
+```{r}
+ggplot(couples, aes(x = hAge, y = wAge)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_abline(intercept = 0, 
+              slope = 1, 
+              color = "red", 
+              linetype = "dashed") +
+  coord_fixed() +
+  labs(title = "Ages of Married Couples",
+       x = "Husband's Age in years", 
+       y = "Wife's Age in years") + 
+  geom_point
+```

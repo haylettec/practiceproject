@@ -1,0 +1,47 @@
+---
+title: "Untitled"
+author: "Elise Haylett"
+date: "10/3/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+galton <- read.csv(file = 
+url("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/galtonheightdata.csv")) %>%
+  mutate(MidParent = (Father + Mother)/2)
+
+str(galton)
+head(galton)
+```
+
+```{r}
+ggplot(galton, aes(x = MidParent, y = Height, color = Gender)) +
+  geom_point(alpha = 0.25) + #will group by gender
+  geom_smooth(method = "lm", se = FALSE) + #will group by gender
+  coord_fixed() +
+  scale_x_continuous(breaks = seq(55, 80, 5), limits = c(55,80)) +
+  scale_y_continuous(breaks = seq(55, 80, 5), limits = c(55, 80)) +
+  labs(title = "Galton's Height Data",
+       subtitle = "from original regression study",
+       x = "average parent height (inches)",
+       y = "average child height (inches)") +
+  theme_linedraw()
+  
+```
+
+```{r}
+lm(Height ~ MidParent + Gender, data = galton)
+
+#Height_Hat = 15.20 + 0.7329(MidParent) + 5.228(Gender)
+#women: Height_Hat = 15.20 + 0.7329(MidParent)
+#men: Height_Hat = (15.20 + 5.228) + 0.7329(MidParent)
+```
+
+
+
